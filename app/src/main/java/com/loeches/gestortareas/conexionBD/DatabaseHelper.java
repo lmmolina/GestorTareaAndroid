@@ -16,7 +16,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-
+        db.execSQL("CREATE TABLE IF NOT EXISTS Trabajador (" +
+                "    DNI VARCHAR(20) PRIMARY KEY," +
+                "    nombre VARCHAR(100)," +
+                "    salarioHora DOUBLE," +
+                "    telefono VARCHAR(20)," +
+                "    correo VARCHAR(100)" +
+                ");");
+        db.execSQL("CREATE TABLE IF NOT EXISTS Tarea (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "fecha DATE," +
+                "horaInicio TIME," +
+                "horaFin TIME," +
+                "lugar VARCHAR(255)," +
+                "tarea TEXT);");
     }
 
     @Override
