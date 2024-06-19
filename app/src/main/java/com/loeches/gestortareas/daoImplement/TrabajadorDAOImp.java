@@ -44,12 +44,23 @@ public class TrabajadorDAOImp implements TrabajadorDAO {
     }
 
     public void AumentarSalario(int porcentaje, int max) {
-        //"UPDATE SET salarioHora= salarioHora*0.1 WHERE salario<20"
-        //db.update()
+        double por = 1 + porcentaje / 100.0;
+        db.execSQL("UPDATE Trabajador SET salarioHora = salarioHora * ? WHERE salario < ?",
+                new String[]{por + "", max + ""});
+    }
+
+    public double PromedioSalario() {
+        Cursor cursor = db.rawQuery("SELECT AVG(salarioHora), SUM(salarioHora) FROM Trabajador", null);
+        if (cursor.moveToFirst()) {
+            return cursor.getDouble(0);
+        }
+        return -1;
     }
 
     @Override
     public Trabajador ObtenerTrabajador(String DNI) {
+        // Esta linea es exactamente lo mismo que la siguiente
+        // Cursor cursor = db.rawQuery("SELECT * FROM Trabajador WHERE DNI = ?", new String[]{DNI});
         Cursor cursor = db.query("Trabajador", null, "DNI=?", new String[]{DNI}, null, null, null);
         if (cursor.moveToFirst()) {
             String nombre = cursor.getString(cursor.getColumnIndexOrThrow("nombre"));
