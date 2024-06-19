@@ -29,7 +29,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "horaInicio TIME," +
                 "horaFin TIME," +
                 "lugar VARCHAR(255)," +
-                "tarea TEXT);");
+                "tarea TEXT," +
+                "DNI VARCHAR(20));");
     }
 
     @Override
