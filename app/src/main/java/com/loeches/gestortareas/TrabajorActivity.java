@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,11 +19,20 @@ import com.loeches.gestortareas.daoImplement.TareaDAOImp;
 import com.loeches.gestortareas.daoImplement.TrabajadorDAOImp;
 import com.loeches.gestortareas.daoInterface.TareaDAO;
 import com.loeches.gestortareas.daoInterface.TrabajadorDAO;
+import com.loeches.gestortareas.modelos.Tarea;
 import com.loeches.gestortareas.modelos.Trabajador;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TrabajorActivity extends AppCompatActivity {
     TrabajadorDAO datosTra;
     TareaDAO datosTar;
+    List<Tarea> tareas;
+    LinearLayout ltareas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +52,8 @@ public class TrabajorActivity extends AppCompatActivity {
         EditText temail = findViewById(R.id.tEmail);
         Button guardar = findViewById(R.id.bGuardar);
         Button eliminar = findViewById(R.id.bEliminar);
+        Button generarTareas = findViewById(R.id.bTareas);
+        ltareas = findViewById(R.id.llTareas);
 
         Intent intent = getIntent();
         final String dni = intent.getStringExtra("DNI");
@@ -49,6 +62,7 @@ public class TrabajorActivity extends AppCompatActivity {
         datosTra = new TrabajadorDAOImp(db.getWritableDatabase());
         datosTar = new TareaDAOImp(db.getWritableDatabase());
 
+        tareas = new ArrayList<>();
         if (dni != null) {
             Trabajador tra = datosTra.ObtenerTrabajador(dni);
             tnombre.setText(tra.getNombre());
@@ -57,6 +71,9 @@ public class TrabajorActivity extends AppCompatActivity {
             tsalario.setText(tra.getSalarioHora() + "€");
             ttelefono.setText(tra.getTelefono());
             temail.setText(tra.getCorreo());
+            datosTar.ObtenerTarea(tra);
+            tareas.addAll(tra.getTareas());
+            MostrarTareas();
         }
 
         guardar.setOnClickListener(new View.OnClickListener() {
@@ -64,7 +81,8 @@ public class TrabajorActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String nombre = tnombre.getText().toString();
                 String ndni = tdni.getText().toString();
-                double salario = Double.parseDouble(tsalario.getText().toString());
+                double salario = Double.parseDouble(
+                        tsalario.getText().toString().replace("€", ""));
                 String telefono = ttelefono.getText().toString();
                 String correo = temail.getText().toString();
                 Trabajador t = new Trabajador(nombre, salario, ndni, telefono, correo);
@@ -72,6 +90,11 @@ public class TrabajorActivity extends AppCompatActivity {
                     datosTra.ActualizarTrabajador(t);
                 } else {
                     datosTra.InsertarTrabajador(t);
+                }
+                for (Tarea tar : tareas) {
+                    if (tar.getId() == -1) {
+                        datosTar.AgregarTarea(tar, t);
+                    }
                 }
                 finish();
             }
@@ -85,5 +108,48 @@ public class TrabajorActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        generarTareas.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for (int i = 0; i < 5; i++) {
+                    tareas.add(
+                            new Tarea(LocalDate.now().plusDays(i),
+                                    LocalTime.of(8, 0),
+                                    LocalTime.of(15, 0),
+                                    "Un lugar",
+                                    "Lo que tienes que hacer"));
+                }
+                MostrarTareas();
+            }
+        });
+    }
+
+    public void MostrarTareas() {
+        ltareas.removeAllViews();
+        for (Tarea t : tareas) {
+            LinearLayout ll = new LinearLayout(this);
+            ll.setOrientation(LinearLayout.HORIZONTAL);
+            TextView tv = new TextView(this);
+            tv.setText(
+                    t.getFecha().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) +
+                            " " + t.getHoraInicio().format(DateTimeFormatter.ISO_LOCAL_TIME) +
+                            " " + t.getLugar());
+            Button b = new Button(this);
+            b.setText("Eliminar");
+
+            ll.addView(tv);
+            ll.addView(b);
+            ltareas.addView(ll);
+
+            b.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    datosTar.EliminarTarea(t);
+                    tareas.remove(t);
+                    MostrarTareas();
+                }
+            });
+        }
     }
 }

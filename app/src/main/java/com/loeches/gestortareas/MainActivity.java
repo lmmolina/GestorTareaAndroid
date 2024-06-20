@@ -28,6 +28,8 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     TableLayout tl;
     TrabajadorDAO datos;
+    //datos = new TrabajadorDAOImp(db.getWritableDatabase());
+    TextView promedio;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
 
         tl = findViewById(R.id.tlTrabajadores);
         FloatingActionButton b = findViewById(R.id.bAdicionar);
+        promedio = findViewById(R.id.tPromedio);
+        Button aumentar = findViewById(R.id.bAumento);
 
         DatabaseHelper db = new DatabaseHelper(this);
         datos = new TrabajadorDAOImp(db.getWritableDatabase());
@@ -53,12 +57,30 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        aumentar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (datos instanceof TrabajadorDAOImp) {
+                    ((TrabajadorDAOImp) datos).AumentarSalario(20, 30);
+                    onResume();
+                }
+            }
+        });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         MostrarTrabajadores(datos.ObtenerTrabajadores());
+        MostrarPromedioSalario();
+    }
+
+    public void MostrarPromedioSalario() {
+        if (datos instanceof TrabajadorDAOImp) {
+            double prom = ((TrabajadorDAOImp) datos).PromedioSalario();
+            prom = Math.round(prom * 100) / 100.0;
+            promedio.setText("El salario promedio es " + prom + "€.");
+        }
     }
 
     public void MostrarTrabajadores(List<Trabajador> trabajadores) {
@@ -82,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
         t3.setTypeface(null, Typeface.BOLD);
         parametros = new TableRow.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1);
         Space t4 = new Space(this);
-        t3.setLayoutParams(parametros);
+        t4.setLayoutParams(parametros);
         header.addView(t1);
         header.addView(t2);
         header.addView(t3);

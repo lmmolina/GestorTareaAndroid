@@ -16,7 +16,7 @@
             android:name=".MainActivity2"
             android:exported="false"
             android:label="@string/title_activity_main2"
-            android:theme="@style/Theme.GestorTareas" />
+            android:theme="@style/Theme.GestorTareas.NoActionBar" />
         <activity
             android:name=".TrabajorActivity"
             android:exported="false" />

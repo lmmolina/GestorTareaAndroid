@@ -45,7 +45,7 @@ public class TrabajadorDAOImp implements TrabajadorDAO {
 
     public void AumentarSalario(int porcentaje, int max) {
         double por = 1 + porcentaje / 100.0;
-        db.execSQL("UPDATE Trabajador SET salarioHora = salarioHora * ? WHERE salario < ?",
+        db.execSQL("UPDATE Trabajador SET salarioHora = salarioHora * ? WHERE salarioHora < ?",
                 new String[]{por + "", max + ""});
     }
 

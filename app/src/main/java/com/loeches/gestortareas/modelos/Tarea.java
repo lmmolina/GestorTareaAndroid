@@ -21,6 +21,7 @@ public class Tarea {
     }
 
     public Tarea(LocalDate fecha, LocalTime horaInicio, LocalTime horaFin, String lugar, String tarea) {
+        id = -1;
         this.fecha = fecha;
         this.horaInicio = horaInicio;
         this.horaFin = horaFin;
