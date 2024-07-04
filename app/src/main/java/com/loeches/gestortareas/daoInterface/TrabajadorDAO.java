@@ -1,10 +1,12 @@
 package com.loeches.gestortareas.daoInterface;
 
+import com.loeches.gestortareas.conexionBD.ConexionMySQL;
 import com.loeches.gestortareas.modelos.Trabajador;
 
 import java.util.List;
 
 public interface TrabajadorDAO {
+
     void InsertarTrabajador(Trabajador t);
 
     void EliminarTrabajador(String DNI);

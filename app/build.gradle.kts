@@ -71,4 +71,8 @@ dependencies {
     androidTestImplementation(libs.ui.test.junit4)
     debugImplementation(libs.ui.tooling)
     debugImplementation(libs.ui.test.manifest)
+
+
+    implementation("com.mysql:mysql-connector-j:8.3.0")
+
 }

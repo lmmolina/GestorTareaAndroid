@@ -1,4 +1,4 @@
-package com.loeches.gestortareas.daoImplement;
+package com.loeches.gestortareas.daoImplementSQLite;
 
 import android.content.ContentValues;
 import android.database.Cursor;

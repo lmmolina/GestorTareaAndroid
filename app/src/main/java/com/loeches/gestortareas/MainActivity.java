@@ -19,7 +19,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.loeches.gestortareas.conexionBD.DatabaseHelper;
-import com.loeches.gestortareas.daoImplement.TrabajadorDAOImp;
+import com.loeches.gestortareas.daoImplementSQLite.TrabajadorDAOImp;
 import com.loeches.gestortareas.daoInterface.TrabajadorDAO;
 import com.loeches.gestortareas.modelos.Trabajador;
 

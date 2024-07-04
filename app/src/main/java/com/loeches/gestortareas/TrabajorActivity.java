@@ -15,8 +15,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.loeches.gestortareas.conexionBD.DatabaseHelper;
-import com.loeches.gestortareas.daoImplement.TareaDAOImp;
-import com.loeches.gestortareas.daoImplement.TrabajadorDAOImp;
+import com.loeches.gestortareas.daoImplementSQLite.TareaDAOImp;
+import com.loeches.gestortareas.daoImplementSQLite.TrabajadorDAOImp;
 import com.loeches.gestortareas.daoInterface.TareaDAO;
 import com.loeches.gestortareas.daoInterface.TrabajadorDAO;
 import com.loeches.gestortareas.modelos.Tarea;
@@ -71,7 +71,7 @@ public class TrabajorActivity extends AppCompatActivity {
             tsalario.setText(tra.getSalarioHora() + "€");
             ttelefono.setText(tra.getTelefono());
             temail.setText(tra.getCorreo());
-            datosTar.ObtenerTarea(tra);
+            datosTar.ObtenerTareas(tra);
             tareas.addAll(tra.getTareas());
             MostrarTareas();
         }

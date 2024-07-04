@@ -1,4 +1,4 @@
-package com.loeches.gestortareas.daoImplement;
+package com.loeches.gestortareas.daoImplementSQLite;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -11,7 +11,6 @@ import com.loeches.gestortareas.modelos.Trabajador;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 public class TareaDAOImp implements TareaDAO {
     private SQLiteDatabase db;
@@ -40,7 +39,7 @@ public class TareaDAOImp implements TareaDAO {
     }
 
     @Override
-    public void ObtenerTarea(Trabajador tr) {
+    public void ObtenerTareas(Trabajador tr) {
         Cursor cursor = db.query("Tarea", null, "DNI = ?", new String[]{tr.getDNI()},
                 null, null, null);
         while (cursor.moveToNext()) {
