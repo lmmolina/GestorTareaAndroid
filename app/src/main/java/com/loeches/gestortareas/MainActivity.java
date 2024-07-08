@@ -10,6 +10,7 @@ import android.widget.Space;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,11 +19,14 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.loeches.gestortareas.conexionBD.ConexionMySQL;
 import com.loeches.gestortareas.conexionBD.DatabaseHelper;
+import com.loeches.gestortareas.daoImplementMySQL.TrabajadorMyImp;
 import com.loeches.gestortareas.daoImplementSQLite.TrabajadorDAOImp;
 import com.loeches.gestortareas.daoInterface.TrabajadorDAO;
 import com.loeches.gestortareas.modelos.Trabajador;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -47,8 +51,7 @@ public class MainActivity extends AppCompatActivity {
         promedio = findViewById(R.id.tPromedio);
         Button aumentar = findViewById(R.id.bAumento);
 
-        DatabaseHelper db = new DatabaseHelper(this);
-        datos = new TrabajadorDAOImp(db.getWritableDatabase());
+        EstablecerConexion();
 
         b.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -149,5 +152,25 @@ public class MainActivity extends AppCompatActivity {
             fila.addView(b);
             tl.addView(fila);
         }
+    }
+
+    public void EstablecerConexion() {
+        try {
+            ConexionMySQL conMy = new ConexionMySQL();
+            datos = new TrabajadorMyImp(conMy);
+            Toast.makeText(this, "MySQL Conectado", Toast.LENGTH_LONG).show();
+            return;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        DatabaseHelper db = new DatabaseHelper(this);
+        datos = new TrabajadorDAOImp(db.getWritableDatabase());
+        Toast.makeText(this, "SQLite Conectado", Toast.LENGTH_LONG).show();
+
+    }
+
+    public void ExportarDatos(){
+
     }
 }

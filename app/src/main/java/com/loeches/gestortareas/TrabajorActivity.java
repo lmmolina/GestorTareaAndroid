@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,7 +15,10 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.loeches.gestortareas.conexionBD.ConexionMySQL;
 import com.loeches.gestortareas.conexionBD.DatabaseHelper;
+import com.loeches.gestortareas.daoImplementMySQL.TareaMyImp;
+import com.loeches.gestortareas.daoImplementMySQL.TrabajadorMyImp;
 import com.loeches.gestortareas.daoImplementSQLite.TareaDAOImp;
 import com.loeches.gestortareas.daoImplementSQLite.TrabajadorDAOImp;
 import com.loeches.gestortareas.daoInterface.TareaDAO;
@@ -58,9 +62,7 @@ public class TrabajorActivity extends AppCompatActivity {
         Intent intent = getIntent();
         final String dni = intent.getStringExtra("DNI");
 
-        DatabaseHelper db = new DatabaseHelper(this);
-        datosTra = new TrabajadorDAOImp(db.getWritableDatabase());
-        datosTar = new TareaDAOImp(db.getWritableDatabase());
+       EstablecerConexion();
 
         tareas = new ArrayList<>();
         if (dni != null) {
@@ -151,5 +153,23 @@ public class TrabajorActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    public void EstablecerConexion() {
+        try {
+            ConexionMySQL conMy = new ConexionMySQL();
+            datosTra = new TrabajadorMyImp(conMy);
+            datosTar = new TareaMyImp(conMy);
+            Toast.makeText(this, "MySQL Conectado", Toast.LENGTH_LONG).show();
+            return;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        DatabaseHelper db = new DatabaseHelper(this);
+        datosTra = new TrabajadorDAOImp(db.getWritableDatabase());
+        datosTar = new TareaDAOImp(db.getWritableDatabase());
+        Toast.makeText(this, "SQLite Conectado", Toast.LENGTH_LONG).show();
+
     }
 }

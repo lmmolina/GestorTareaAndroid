@@ -8,8 +8,8 @@ public class ConexionMySQL {
     private Connection conexion;
 
     public ConexionMySQL() throws ClassNotFoundException, SQLException {
-        Class.forName("com.mysql.jdbc.Driver");
-        conexion = DriverManager.getConnection("jdbc:mysql://10.0.2.2:3306/tareas", "root", "");
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        conexion = DriverManager.getConnection("jdbc:mysql://10.0.2.2:3306/tareas", "remoto", "");
     }
 
     public Connection getConexion() {
